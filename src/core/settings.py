@@ -182,3 +182,12 @@ LOGGING = {
         },
     },
 }
+
+# Django Debug Toolbar
+if DEBUG:
+    INSTALLED_APPS.append('debug_toolbar')
+    MIDDLEWARE.insert(
+        MIDDLEWARE.index('django.middleware.common.CommonMiddleware') + 1,
+        'debug_toolbar.middleware.DebugToolbarMiddleware'
+    )
+    INTERNAL_IPS = ['127.0.0.1'] + ALLOWED_HOSTS
