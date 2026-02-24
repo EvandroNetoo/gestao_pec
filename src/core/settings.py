@@ -12,6 +12,11 @@ SECRET_KEY = env_settings.SECRET_KEY
 DEBUG = env_settings.DEBUG
 
 ALLOWED_HOSTS = env_settings.ALLOWED_HOSTS
+CSRF_TRUSTED_ORIGINS = env_settings.CSRF_TRUSTED_ORIGINS
+
+# Security Settings
+SESSION_COOKIE_SECURE = env_settings.SESSION_COOKIE_SECURE
+CSRF_COOKIE_SECURE = env_settings.CSRF_COOKIE_SECURE
 
 
 # Application definition
@@ -33,6 +38,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -110,6 +116,12 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STORAGES = {
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
+WHITENOISE_MANIFEST_STRICT = False
 
 
 # Media files (uploads)
