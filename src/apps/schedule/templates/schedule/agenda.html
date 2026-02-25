@@ -8,14 +8,12 @@
 
 {% endblock title %}
 
-
 {% block extrahead %}
 
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.css"
           rel="stylesheet" />
 
 {% endblock extrahead %}
-
 
 {% block content %}
 
@@ -26,8 +24,12 @@
         </div>
         <div class="navbar-end">
             <div class="flex flex-wrap gap-1 sm:gap-2">
-                <span class="badge badge-xs sm:badge-sm" style="background:#2563eb;color:#fff;">Periódico</span>
-                <span class="badge badge-xs sm:badge-sm" style="background:#c90c0f;color:#fff;">Esporádico</span>
+                <span class="badge badge-xs sm:badge-sm"
+                      style="background:#2563eb;
+                             color:#fff">Periódico</span>
+                <span class="badge badge-xs sm:badge-sm"
+                      style="background:#c90c0f;
+                             color:#fff">Esporádico</span>
             </div>
         </div>
     </div>
@@ -45,11 +47,16 @@
             const isMobile = window.innerWidth < 768;
 
             const calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: isMobile ? 'listWeek' : 'dayGridMonth',
+                allDaySlot: false,
+                initialView: 'dayGridMonth',
                 locale: 'pt-br',
-                headerToolbar: isMobile
-                    ? { left: 'prev,next', center: 'title', right: 'listWeek,dayGridMonth' }
-                    : { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek' },
+                headerToolbar:
+                //   ? { left: 'prev,next', center: 'title', right: 'listWeek,dayGridMonth' } : 
+                {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
                 buttonText: {
                     today: 'Hoje',
                     month: 'Mês',
@@ -78,9 +85,15 @@
                 navLinks: true,
                 editable: false,
                 dayMaxEvents: isMobile ? 2 : true,
-                titleFormat: isMobile
-                    ? { month: 'short', year: 'numeric' }
-                    : { month: 'long', year: 'numeric' },
+                titleFormat: isMobile ?
+                    {
+                        month: 'short',
+                        year: 'numeric'
+                    } :
+                    {
+                        month: 'long',
+                        year: 'numeric'
+                    },
             });
             calendar.render();
         });
@@ -92,11 +105,17 @@
                 flex-wrap: wrap;
                 gap: 0.25rem;
             }
+
             .fc .fc-toolbar-title {
                 font-size: 1rem !important;
             }
+
             .fc .fc-button {
                 padding: 0.2rem 0.5rem;
+                font-size: 0.75rem;
+            }
+
+            .fc-col-header-cell-cushion {
                 font-size: 0.75rem;
             }
         }

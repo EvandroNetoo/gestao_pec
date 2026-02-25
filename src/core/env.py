@@ -1,5 +1,4 @@
 from pathlib import Path
-
 from typing import Any
 
 from pydantic import field_validator
@@ -18,7 +17,7 @@ class EnvSettings(BaseSettings):
     LOG_LEVEL: str = 'INFO'
     ALLOWED_HOSTS: list[str] = ['*']
     CSRF_TRUSTED_ORIGINS: list[str] = []
-    
+
     @field_validator('ALLOWED_HOSTS', 'CSRF_TRUSTED_ORIGINS', mode='before')
     @classmethod
     def parse_comma_separated_list(cls, v: Any) -> list[str]:

@@ -72,7 +72,8 @@ class Aluno(models.Model):
 
     def total_presencas(self) -> int:
         total = (
-            self.alocacoes.filter(
+            self.alocacoes
+            .filter(
                 status=AlocacaoPresenca.Status.PRESENTE,
                 evento__cancelado=False,
             )
@@ -103,7 +104,9 @@ class Evento(models.Model):
     data_hora_inicio = models.DateTimeField('Início')
     data_hora_fim = models.DateTimeField('Fim')
     local = models.CharField(
-        'Local', max_length=200, blank=True, null=True
+        'Local',
+        max_length=200,
+        blank=True,
     )
     peso_presenca = models.IntegerField('Peso da presença', default=1)
     cancelado = models.BooleanField('Cancelado', default=False)
@@ -178,9 +181,7 @@ class AlocacaoPresenca(models.Model):
             conflitos = conflitos.exclude(pk=self.pk)
 
         if conflitos.exists():
-            eventos_conflito = ', '.join(
-                str(a.evento) for a in conflitos[:3]
-            )
+            eventos_conflito = ', '.join(str(a.evento) for a in conflitos[:3])
             raise ValidationError(
                 f'Conflito de horário: o aluno já está alocado em: '
                 f'{eventos_conflito}.'
@@ -190,4 +191,4 @@ class AlocacaoPresenca(models.Model):
         skip_validation = kwargs.pop('skip_validation', False)
         if not skip_validation:
             self.full_clean()
-        super().save(*args, **kwargs)
+        super().save(*args, **kwargs)  # noqa

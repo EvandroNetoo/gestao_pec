@@ -45,7 +45,6 @@ from schedule.models import (
 )
 from schedule.services import copiar_turma
 
-
 # ═══════════════════════════════════════════════════════════════════
 #  VIEWS PÚBLICAS (sem login)
 # ═══════════════════════════════════════════════════════════════════
@@ -108,7 +107,8 @@ class EventoDetalhesView(TemplateView):
             pk=kwargs['pk'],
         )
         alocacoes = (
-            evento.alocacoes.select_related('aluno')
+            evento.alocacoes
+            .select_related('aluno')
             .filter(
                 status__in=[
                     AlocacaoPresenca.Status.PREVISTO,
@@ -136,10 +136,14 @@ class PresencaView(View):
         evento = self.get_evento(pk)
         form = PresencaForm(evento=evento)
 
-        return render(request, self.template_name, {
-            'evento': evento,
-            'form': form,
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                'evento': evento,
+                'form': form,
+            },
+        )
 
     def post(self, request, pk):
         evento = self.get_evento(pk)
@@ -153,10 +157,14 @@ class PresencaView(View):
                 {'evento': evento},
             )
 
-        return render(request, self.template_name, {
-            'evento': evento,
-            'form': form,
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                'evento': evento,
+                'form': form,
+            },
+        )
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -196,9 +204,7 @@ class SemestreListView(ListView):
     context_object_name = 'semestres'
 
     def get_queryset(self):
-        qs = super().get_queryset().annotate(
-            total_turmas=Count('turmas')
-        )
+        qs = super().get_queryset().annotate(total_turmas=Count('turmas'))
         return qs
 
 
@@ -343,30 +349,35 @@ class TurmaCopiarView(View):
     def get(self, request, pk):
         turma = get_object_or_404(Turma, pk=pk)
         form = CopiarTurmaForm()
-        return render(request, 'schedule/gestao/form.html', {
-            'form': form,
-            'page_title': f'Copiar Turma: {turma}',
-            'back_url': reverse_lazy('turma_list'),
-        })
+        return render(
+            request,
+            'schedule/gestao/form.html',
+            {
+                'form': form,
+                'page_title': f'Copiar Turma: {turma}',
+                'back_url': reverse_lazy('turma_list'),
+            },
+        )
 
     def post(self, request, pk):
         turma = get_object_or_404(Turma, pk=pk)
         form = CopiarTurmaForm(request.POST)
         if form.is_valid():
-            nova = copiar_turma(
-                turma, form.cleaned_data['semestre_destino']
-            )
+            nova = copiar_turma(turma, form.cleaned_data['semestre_destino'])
             messages.success(
                 request,
-                f'Turma copiada: {nova} '
-                f'({nova.alunos.count()} alunos).',
+                f'Turma copiada: {nova} ({nova.alunos.count()} alunos).',
             )
             return redirect('turma_list')
-        return render(request, 'schedule/gestao/form.html', {
-            'form': form,
-            'page_title': f'Copiar Turma: {turma}',
-            'back_url': reverse_lazy('turma_list'),
-        })
+        return render(
+            request,
+            'schedule/gestao/form.html',
+            {
+                'form': form,
+                'page_title': f'Copiar Turma: {turma}',
+                'back_url': reverse_lazy('turma_list'),
+            },
+        )
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -546,7 +557,8 @@ class AlunoDetailView(DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['alocacoes'] = (
-            self.object.alocacoes.select_related('evento')
+            self.object.alocacoes
+            .select_related('evento')
             .filter(evento__cancelado=False)
             .order_by('-evento__data_hora_inicio')
         )
@@ -564,8 +576,13 @@ class EventoListView(ListView):
     context_object_name = 'eventos'
 
     def get_queryset(self):
-        qs = super().get_queryset().prefetch_related('oficinas').annotate(
-            total_alocados=Count('alocacoes'),
+        qs = (
+            super()
+            .get_queryset()
+            .prefetch_related('oficinas')
+            .annotate(
+                total_alocados=Count('alocacoes'),
+            )
         )
         q = self.request.GET.get('q', '').strip()
         if q:
@@ -590,11 +607,15 @@ class EventoCreateView(View):
 
     def get(self, request):
         form = EventoCriarForm()
-        return render(request, self.template_name, {
-            'form': form,
-            'page_title': 'Novo Evento',
-            'back_url': reverse_lazy('evento_list'),
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                'form': form,
+                'page_title': 'Novo Evento',
+                'back_url': reverse_lazy('evento_list'),
+            },
+        )
 
     def post(self, request):
         form = EventoCriarForm(request.POST)
@@ -625,12 +646,8 @@ class EventoCreateView(View):
                 evento = Evento(
                     titulo=d['titulo'],
                     tipo=d['tipo'],
-                    data_hora_inicio=datetime.combine(
-                        dt, d['hora_inicio']
-                    ),
-                    data_hora_fim=datetime.combine(
-                        dt, d['hora_fim']
-                    ),
+                    data_hora_inicio=datetime.combine(dt, d['hora_inicio']),
+                    data_hora_fim=datetime.combine(dt, d['hora_fim']),
                     local=d.get('local', '') or '',
                     peso_presenca=d['peso_presenca'],
                 )
@@ -645,11 +662,15 @@ class EventoCreateView(View):
             )
             return redirect('evento_list')
 
-        return render(request, self.template_name, {
-            'form': form,
-            'page_title': 'Novo Evento',
-            'back_url': reverse_lazy('evento_list'),
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                'form': form,
+                'page_title': 'Novo Evento',
+                'back_url': reverse_lazy('evento_list'),
+            },
+        )
 
 
 class EventoUpdateView(UpdateView):
@@ -696,10 +717,9 @@ class EventoDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['alocacoes'] = (
-            self.object.alocacoes.select_related('aluno')
-            .order_by('aluno__nome')
-        )
+        ctx['alocacoes'] = self.object.alocacoes.select_related(
+            'aluno'
+        ).order_by('aluno__nome')
         return ctx
 
 
@@ -709,13 +729,17 @@ class EventoAlocarView(View):
     def get(self, request, pk):
         evento = get_object_or_404(Evento, pk=pk)
         form = AlocarAlunosForm(evento=evento)
-        return render(request, 'schedule/gestao/form.html', {
-            'form': form,
-            'page_title': f'Alocar Alunos — {evento.titulo}',
-            'back_url': reverse_lazy(
-                'evento_detail_gestao', kwargs={'pk': pk}
-            ),
-        })
+        return render(
+            request,
+            'schedule/gestao/form.html',
+            {
+                'form': form,
+                'page_title': f'Alocar Alunos — {evento.titulo}',
+                'back_url': reverse_lazy(
+                    'evento_detail_gestao', kwargs={'pk': pk}
+                ),
+            },
+        )
 
     def post(self, request, pk):
         evento = get_object_or_404(Evento, pk=pk)
@@ -743,13 +767,17 @@ class EventoAlocarView(View):
             for erro in erros:
                 messages.error(request, erro)
             return redirect('evento_detail_gestao', pk=pk)
-        return render(request, 'schedule/gestao/form.html', {
-            'form': form,
-            'page_title': f'Alocar Alunos — {evento.titulo}',
-            'back_url': reverse_lazy(
-                'evento_detail_gestao', kwargs={'pk': pk}
-            ),
-        })
+        return render(
+            request,
+            'schedule/gestao/form.html',
+            {
+                'form': form,
+                'page_title': f'Alocar Alunos — {evento.titulo}',
+                'back_url': reverse_lazy(
+                    'evento_detail_gestao', kwargs={'pk': pk}
+                ),
+            },
+        )
 
 
 class AlocacaoRemoverView(View):
@@ -791,10 +819,12 @@ class RelatorioPresencaTurmaView(ListView):
     context_object_name = 'turmas'
 
     def get_queryset(self):
-        return Turma.objects.filter(
-            semestre__ativo=True
-        ).select_related('semestre').prefetch_related('alunos').order_by(
-            '-semestre__nome', 'nome'
+        return (
+            Turma.objects
+            .filter(semestre__ativo=True)
+            .select_related('semestre')
+            .prefetch_related('alunos')
+            .order_by('-semestre__nome', 'nome')
         )
 
     def get_context_data(self, **kwargs):
@@ -846,27 +876,32 @@ class RelatorioPresencaEventoView(ListView):
     context_object_name = 'eventos'
 
     def get_queryset(self):
-        return Evento.objects.filter(cancelado=False).annotate(
-            total_alocados=Count('alocacoes'),
-            total_presentes=Count(
-                Case(
-                    When(
-                        alocacoes__status=AlocacaoPresenca.Status.PRESENTE,
-                        then=Value(1),
-                    ),
-                    output_field=IntegerField(),
-                )
-            ),
-            total_ausentes=Count(
-                Case(
-                    When(
-                        alocacoes__status=AlocacaoPresenca.Status.AUSENTE,
-                        then=Value(1),
-                    ),
-                    output_field=IntegerField(),
-                )
-            ),
-        ).order_by('-data_hora_inicio')
+        return (
+            Evento.objects
+            .filter(cancelado=False)
+            .annotate(
+                total_alocados=Count('alocacoes'),
+                total_presentes=Count(
+                    Case(
+                        When(
+                            alocacoes__status=AlocacaoPresenca.Status.PRESENTE,
+                            then=Value(1),
+                        ),
+                        output_field=IntegerField(),
+                    )
+                ),
+                total_ausentes=Count(
+                    Case(
+                        When(
+                            alocacoes__status=AlocacaoPresenca.Status.AUSENTE,
+                            then=Value(1),
+                        ),
+                        output_field=IntegerField(),
+                    )
+                ),
+            )
+            .order_by('-data_hora_inicio')
+        )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -888,7 +923,8 @@ class RelatorioPresencaAlunoView(DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         alocacoes = (
-            self.object.alocacoes.select_related('evento')
+            self.object.alocacoes
+            .select_related('evento')
             .filter(evento__cancelado=False)
             .order_by('-evento__data_hora_inicio')
         )
@@ -909,9 +945,7 @@ class RelatorioPresencaAlunoView(DetailView):
             'ausentes': ausentes,
             'dispensados': dispensados,
             'pontos': self.object.total_presencas(),
-            'percentual': (
-                round(presentes * 100 / total) if total else 0
-            ),
+            'percentual': (round(presentes * 100 / total) if total else 0),
         }
         return ctx
 
@@ -956,16 +990,19 @@ class RelatorioGeralView(TemplateView):
         )
 
         ctx['eventos_por_tipo'] = (
-            Evento.objects.filter(cancelado=False)
+            Evento.objects
+            .filter(cancelado=False)
             .values('tipo')
             .annotate(total=Count('pk'))
             .order_by('tipo')
         )
 
         ctx['top_alunos'] = (
-            Aluno.objects.filter(
+            Aluno.objects
+            .filter(
                 turma__semestre__ativo=True,
-            ).annotate(
+            )
+            .annotate(
                 pontos=Sum(
                     Case(
                         When(

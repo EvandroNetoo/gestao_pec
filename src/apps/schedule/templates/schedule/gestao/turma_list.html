@@ -1,6 +1,11 @@
 {% extends "schedule/gestao/base_gestao.html" %}
 
-{% block title %}Turmas — {% endblock title %}
+{% block title %}
+
+    Turmas —
+
+{% endblock title %}
+
 
 {% block content %}
 
@@ -23,9 +28,12 @@
 
                     {% for semestre in semestres %}
 
-                        <option value="{{ semestre.pk }}"
-                                {% if semestre_filtro == semestre.pk|stringformat:"d" %}selected{% endif %}>
-                            {{ semestre.nome }}{% if not semestre.ativo %} (inativo){% endif %}
+
+                        <option value="{{ semestre.pk }}" 
+                            {% if semestre_filtro == semestre.pk|stringformat:"d" %}selected{% endif %}>
+                            {{ semestre.nome }}
+
+                            {% if not semestre.ativo %}(inativo){% endif %}
                         </option>
 
                     {% endfor %}
@@ -34,7 +42,9 @@
                 <button type="submit" class="btn btn-sm btn-neutral">Filtrar</button>
 
                 {% if q or semestre_filtro %}
+
                     <a href="{% url 'turma_list' %}" class="btn btn-sm btn-ghost">Limpar</a>
+
                 {% endif %}
 
             </form>
@@ -60,10 +70,15 @@
                                     <span class="badge badge-ghost badge-sm">{{ turma.semestre }}</span>
                                 </td>
                                 <td>
+
                                     {% if turma.semestre.ativo %}
+
                                         <span class="badge badge-success badge-xs">Ativo</span>
+
                                     {% else %}
+
                                         <span class="badge badge-ghost badge-xs">Inativo</span>
+
                                     {% endif %}
                                 </td>
                                 <td>{{ turma.total_alunos }}</td>
@@ -72,8 +87,7 @@
                                         <a href="{% url 'turma_copiar' turma.pk %}"
                                            class="btn btn-ghost btn-xs"
                                            title="Copiar para novo semestre">📋</a>
-                                        <a href="{% url 'turma_update' turma.pk %}"
-                                           class="btn btn-ghost btn-xs">✏️</a>
+                                        <a href="{% url 'turma_update' turma.pk %}" class="btn btn-ghost btn-xs">✏️</a>
                                         <a href="{% url 'turma_delete' turma.pk %}"
                                            class="btn btn-ghost btn-xs text-error">🗑️</a>
                                     </div>
@@ -83,9 +97,7 @@
                         {% empty %}
 
                             <tr>
-                                <td colspan="5" class="text-center text-base-content/50 py-8">
-                                    Nenhuma turma encontrada.
-                                </td>
+                                <td colspan="5" class="text-center text-base-content/50 py-8">Nenhuma turma encontrada.</td>
                             </tr>
 
                         {% endfor %}

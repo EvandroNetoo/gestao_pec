@@ -149,8 +149,6 @@ class WidgetsShowcaseForm(forms.Form):
         initial='valor-oculto',
     )
 
-
-
     def __init__(self, *args, **kwargs):
         kwargs['use_required_attribute'] = False
         super().__init__(*args, **kwargs)

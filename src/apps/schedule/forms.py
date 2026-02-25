@@ -26,9 +26,7 @@ class TurmaForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['semestre'].queryset = Semestre.objects.filter(
-            ativo=True
-        )
+        self.fields['semestre'].queryset = Semestre.objects.filter(ativo=True)
 
 
 class CopiarTurmaForm(forms.Form):
@@ -106,10 +104,14 @@ class EventoCriarForm(forms.Form):
         widget=forms.DateInput(attrs={'type': 'date'}),
     )
     local = forms.CharField(
-        max_length=200, required=False, label='Local',
+        max_length=200,
+        required=False,
+        label='Local',
     )
     peso_presenca = forms.IntegerField(
-        initial=1, label='Peso da presença', min_value=1,
+        initial=1,
+        label='Peso da presença',
+        min_value=1,
     )
     oficinas = forms.ModelMultipleChoiceField(
         queryset=Oficina.objects.all(),
@@ -170,6 +172,7 @@ class EventoForm(forms.ModelForm):
             'local',
             'peso_presenca',
             'oficinas',
+            'cancelado',
         ]
         widgets = {
             'data_hora_inicio': DateTimeInput(
@@ -221,9 +224,9 @@ class AlocarAlunosForm(forms.Form):
         super().__init__(*args, **kwargs)
         ja_alocados = evento.alocacoes.values_list('aluno_id', flat=True)
         oficinas_evento = evento.oficinas.all()
-        qs = Aluno.objects.filter(
-            turma__semestre__ativo=True
-        ).exclude(pk__in=ja_alocados)
+        qs = Aluno.objects.filter(turma__semestre__ativo=True).exclude(
+            pk__in=ja_alocados
+        )
         if oficinas_evento.exists():
             qs = qs.filter(oficinas_fixas__in=oficinas_evento).distinct()
         self.fields['alunos'].queryset = qs
@@ -237,7 +240,8 @@ class PresencaForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.evento = evento
         self.alocacoes = (
-            evento.alocacoes.select_related('aluno')
+            evento.alocacoes
+            .select_related('aluno')
             .exclude(status=AlocacaoPresenca.Status.DISPENSADO)
             .order_by('aluno__nome')
         )
@@ -247,9 +251,7 @@ class PresencaForm(forms.Form):
             self.fields[field_name] = forms.BooleanField(
                 required=False,
                 label=alocacao.aluno.nome,
-                initial=(
-                    alocacao.status == AlocacaoPresenca.Status.PRESENTE
-                ),
+                initial=(alocacao.status == AlocacaoPresenca.Status.PRESENTE),
             )
 
     def save(self):

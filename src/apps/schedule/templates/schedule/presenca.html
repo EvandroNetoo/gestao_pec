@@ -6,7 +6,6 @@
 
 {% endblock title %}
 
-
 {% block content %}
 
     <div class="navbar bg-base-100 shadow-sm px-2 sm:px-4">
@@ -32,7 +31,6 @@
 
                 {% if form.fields %}
 
-
                     <form hx-post="{% url 'evento_presenca' evento.pk %}"
                           hx-target="#presenca-form"
                           hx-swap="outerHTML"
@@ -49,7 +47,6 @@
                                 <tbody>
 
                                     {% for field in form %}
-
 
                                         <tr>
                                             <td>

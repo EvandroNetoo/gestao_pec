@@ -74,7 +74,6 @@ class SignoutView(View):
         return HttpResponseClientRedirect(reverse('signin'))
 
 
-
 @login_not_required
 def widgets_showcase(request: HttpRequest):
     form = WidgetsShowcaseForm({})

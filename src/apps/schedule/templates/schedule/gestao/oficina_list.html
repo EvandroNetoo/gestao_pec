@@ -1,6 +1,11 @@
 {% extends "schedule/gestao/base_gestao.html" %}
 
-{% block title %}Oficinas — {% endblock title %}
+{% block title %}
+
+    Oficinas —
+
+{% endblock title %}
+
 
 {% block content %}
 
@@ -21,7 +26,9 @@
                 <button type="submit" class="btn btn-sm btn-neutral">Buscar</button>
 
                 {% if q %}
+
                     <a href="{% url 'oficina_list' %}" class="btn btn-sm btn-ghost">Limpar</a>
+
                 {% endif %}
 
             </form>
@@ -39,6 +46,7 @@
 
                         {% for oficina in oficinas %}
 
+
                             <tr>
                                 <td class="font-medium">{{ oficina.nome }}</td>
                                 <td>{{ oficina.local_padrao }}</td>
@@ -55,9 +63,7 @@
                         {% empty %}
 
                             <tr>
-                                <td colspan="3" class="text-center text-base-content/50 py-8">
-                                    Nenhuma oficina encontrada.
-                                </td>
+                                <td colspan="3" class="text-center text-base-content/50 py-8">Nenhuma oficina encontrada.</td>
                             </tr>
 
                         {% endfor %}

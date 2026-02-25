@@ -187,14 +187,14 @@ if DEBUG:
     INSTALLED_APPS.append('debug_toolbar')
     MIDDLEWARE.insert(
         MIDDLEWARE.index('django.middleware.common.CommonMiddleware') + 1,
-        'debug_toolbar.middleware.DebugToolbarMiddleware'
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
-    
+
     # Em produção (Railway), o IP do cliente muda por causa do proxy reverso.
     # Para forçar a exibição da barra quando DEBUG=True, usamos uma função customizada.
     def show_toolbar(request):
         return True
-        
+
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_TOOLBAR_CALLBACK': 'core.settings.show_toolbar',
     }

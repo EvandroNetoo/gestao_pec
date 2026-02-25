@@ -1,6 +1,11 @@
 {% extends "schedule/gestao/base_gestao.html" %}
 
-{% block title %}Alunos — {% endblock title %}
+{% block title %}
+
+    Alunos —
+
+{% endblock title %}
+
 
 {% block content %}
 
@@ -23,10 +28,9 @@
 
                     {% for turma in turmas %}
 
-                        <option value="{{ turma.pk }}"
-                                {% if turma_filtro == turma.pk|stringformat:"d" %}selected{% endif %}>
-                            {{ turma }}
-                        </option>
+
+                        <option value="{{ turma.pk }}" 
+                            {% if turma_filtro == turma.pk|stringformat:"d" %}selected{% endif %}>{{ turma }}</option>
 
                     {% endfor %}
 
@@ -34,7 +38,9 @@
                 <button type="submit" class="btn btn-sm btn-neutral">Filtrar</button>
 
                 {% if q or turma_filtro %}
+
                     <a href="{% url 'aluno_list' %}" class="btn btn-sm btn-ghost">Limpar</a>
+
                 {% endif %}
 
             </form>
@@ -54,20 +60,23 @@
 
                         {% for aluno in alunos %}
 
+
                             <tr>
                                 <td>
-                                    <a href="{% url 'aluno_detail' aluno.pk %}" class="link link-hover font-medium">
-                                        {{ aluno.nome }}
-                                    </a>
+                                    <a href="{% url 'aluno_detail' aluno.pk %}"
+                                       class="link link-hover font-medium">{{ aluno.nome }}</a>
                                 </td>
                                 <td>
                                     <span class="badge badge-ghost badge-sm">{{ aluno.turma }}</span>
                                 </td>
                                 <td>
+
                                     {% for oficina in aluno.oficinas_fixas.all %}
+
                                         <span class="badge badge-sm badge-outline">{{ oficina.nome }}</span>
                                     {% empty %}
                                         <span class="text-base-content/40">—</span>
+
                                     {% endfor %}
                                 </td>
                                 <td>
@@ -78,8 +87,7 @@
                                         <a href="{% url 'relatorio_aluno' aluno.pk %}"
                                            class="btn btn-ghost btn-xs"
                                            title="Relatório">📊</a>
-                                        <a href="{% url 'aluno_update' aluno.pk %}"
-                                           class="btn btn-ghost btn-xs">✏️</a>
+                                        <a href="{% url 'aluno_update' aluno.pk %}" class="btn btn-ghost btn-xs">✏️</a>
                                         <a href="{% url 'aluno_delete' aluno.pk %}"
                                            class="btn btn-ghost btn-xs text-error">🗑️</a>
                                     </div>
@@ -89,9 +97,7 @@
                         {% empty %}
 
                             <tr>
-                                <td colspan="5" class="text-center text-base-content/50 py-8">
-                                    Nenhum aluno encontrado.
-                                </td>
+                                <td colspan="5" class="text-center text-base-content/50 py-8">Nenhum aluno encontrado.</td>
                             </tr>
 
                         {% endfor %}

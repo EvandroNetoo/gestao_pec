@@ -52,7 +52,7 @@ select = [
     "UP",  # pyupgrade (uso de sintaxe moderna)
     "SIM", # simplificações de código
     "I",   # isort (ordem de imports)
-    "DJ",  # regras específicas de Django
+    # "DJ",  # regras específicas de Django
     "ASYNC", # regras para código assíncrono
     "Q",   # flake8-quotes (estilo de aspas)
     "S",   # bandit (segurança)

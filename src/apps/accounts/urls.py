@@ -10,5 +10,9 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += [
-        path('widgets-showcase/', views.widgets_showcase, name='widgets_showcase'),
+        path(
+            'widgets-showcase/',
+            views.widgets_showcase,
+            name='widgets_showcase',
+        ),
     ]
