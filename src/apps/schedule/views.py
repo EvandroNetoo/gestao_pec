@@ -32,6 +32,7 @@ from schedule.forms import (
     CopiarTurmaForm,
     EventoCriarForm,
     EventoForm,
+    OficinaBulkForm,
     OficinaForm,
     PresencaForm,
     SemestreForm,
@@ -182,7 +183,9 @@ class DashboardView(TemplateView):
         ctx['total_turmas'] = Turma.objects.filter(
             semestre__ativo=True
         ).count()
-        ctx['total_oficinas'] = Oficina.objects.count()
+        ctx['total_oficinas'] = Oficina.objects.filter(
+            semestre__ativo=True
+        ).count()
         ctx['total_alunos'] = Aluno.objects.filter(
             turma__semestre__ativo=True
         ).count()
@@ -396,6 +399,8 @@ class OficinaListView(ListView):
         qs = (
             super()
             .get_queryset()
+            .select_related('semestre')
+            .filter(semestre__ativo=True)
             .annotate(
                 total_alunos=Count(
                     'alunos',
@@ -464,6 +469,46 @@ class OficinaDeleteView(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, 'Oficina excluída com sucesso.')
         return super().form_valid(form)
+
+
+class OficinaBulkCreateView(View):
+    """Adicionar várias oficinas de uma vez."""
+
+    template_name = 'schedule/gestao/oficina_bulk.html'
+    success_url = reverse_lazy('oficina_list')
+
+    def get(self, request):
+        form = OficinaBulkForm()
+        return render(request, self.template_name, {
+            'form': form,
+            'page_title': 'Adicionar Oficinas em Lote',
+            'back_url': self.success_url,
+        })
+
+    def post(self, request):
+        form = OficinaBulkForm(request.POST)
+        if form.is_valid():
+            semestre = form.cleaned_data['semestre']
+            oficinas_data = form.cleaned_data['oficinas']
+            oficinas = [
+                Oficina(
+                    nome=item['nome'],
+                    local_padrao=item['local_padrao'],
+                    semestre=semestre,
+                )
+                for item in oficinas_data
+            ]
+            Oficina.objects.bulk_create(oficinas)
+            messages.success(
+                request,
+                f'{len(oficinas)} oficina(s) adicionada(s) ao semestre {semestre}.',
+            )
+            return redirect(self.success_url)
+        return render(request, self.template_name, {
+            'form': form,
+            'page_title': 'Adicionar Oficinas em Lote',
+            'back_url': self.success_url,
+        })
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -1027,7 +1072,9 @@ class RelatorioGeralView(TemplateView):
         ctx['total_turmas'] = Turma.objects.filter(
             semestre__ativo=True
         ).count()
-        ctx['total_oficinas'] = Oficina.objects.count()
+        ctx['total_oficinas'] = Oficina.objects.filter(
+            semestre__ativo=True
+        ).count()
         ctx['total_alunos'] = Aluno.objects.filter(
             turma__semestre__ativo=True
         ).count()

@@ -63,6 +63,7 @@ class SigninView(View):
         login(request, form.get_user())
 
         redirect_url = request.GET.get('next', '')
+        print(f'redirect_url: {redirect_url}')
         return HttpResponseClientRedirect(
             redirect_url if redirect_url else reverse('home')
         )

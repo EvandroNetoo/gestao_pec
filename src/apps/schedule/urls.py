@@ -85,6 +85,11 @@ urlpatterns = [
         name='oficina_create',
     ),
     path(
+        'gestao/oficinas/lote/',
+        views.OficinaBulkCreateView.as_view(),
+        name='oficina_bulk_create',
+    ),
+    path(
         'gestao/oficinas/<int:pk>/editar/',
         views.OficinaUpdateView.as_view(),
         name='oficina_update',

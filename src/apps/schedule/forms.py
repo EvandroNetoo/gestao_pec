@@ -47,10 +47,11 @@ class OficinaForm(forms.ModelForm):
 
     class Meta:
         model = Oficina
-        fields = ['nome', 'local_padrao']
+        fields = ['nome', 'local_padrao', 'semestre']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['semestre'].queryset = Semestre.objects.filter(ativo=True)
         self.fields['alunos'].queryset = (
             Aluno.objects
             .filter(turma__semestre__ativo=True)
@@ -77,6 +78,52 @@ class OficinaForm(forms.ModelForm):
         return oficina
 
 
+class OficinaBulkForm(forms.Form):
+    """Adicionar várias oficinas de uma vez, uma por linha."""
+
+    semestre = forms.ModelChoiceField(
+        queryset=Semestre.objects.filter(ativo=True),
+        label='Semestre',
+    )
+    oficinas = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                'rows': 10,
+                'placeholder': 'Uma oficina por linha, formato:\n'
+                'Nome da Oficina | Local Padrão\n'
+                'Ex:\nMúsica | Sala 101\nTeatro | Auditório\nDança | Sala 202',
+            }
+        ),
+        label='Oficinas',
+        help_text='Uma oficina por linha. Formato: nome | local padrão. '
+        'Linhas em branco serão ignoradas.',
+    )
+
+    def clean_oficinas(self):
+        raw = self.cleaned_data['oficinas']
+        resultado = []
+        for i, linha in enumerate(raw.splitlines(), 1):
+            linha = linha.strip()
+            if not linha:
+                continue
+            partes = linha.split('|')
+            if len(partes) != 2:
+                raise forms.ValidationError(
+                    f'Linha {i}: formato inválido "{linha}". '
+                    'Use: nome | local padrão'
+                )
+            nome = partes[0].strip()
+            local = partes[1].strip()
+            if not nome or not local:
+                raise forms.ValidationError(
+                    f'Linha {i}: nome e local padrão são obrigatórios.'
+                )
+            resultado.append({'nome': nome, 'local_padrao': local})
+        if not resultado:
+            raise forms.ValidationError('Informe ao menos uma oficina.')
+        return resultado
+
+
 # ── Aluno ──────────────────────────────────────────────────────────
 class AlunoForm(forms.ModelForm):
     class Meta:
@@ -89,6 +136,9 @@ class AlunoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['turma'].queryset = Turma.objects.filter(
+            semestre__ativo=True
+        ).select_related('semestre')
+        self.fields['oficinas_fixas'].queryset = Oficina.objects.filter(
             semestre__ativo=True
         ).select_related('semestre')
 
@@ -176,7 +226,7 @@ class EventoCriarForm(forms.Form):
         min_value=1,
     )
     oficinas = forms.ModelMultipleChoiceField(
-        queryset=Oficina.objects.all(),
+        queryset=Oficina.objects.filter(semestre__ativo=True).select_related('semestre'),
         required=False,
         widget=forms.CheckboxSelectMultiple,
         label='Oficinas',
@@ -250,6 +300,9 @@ class EventoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['oficinas'].queryset = Oficina.objects.filter(
+            semestre__ativo=True
+        ).select_related('semestre')
         self.fields['data_hora_inicio'].input_formats = [
             '%Y-%m-%dT%H:%M',
         ]

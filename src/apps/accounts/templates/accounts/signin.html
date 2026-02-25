@@ -18,7 +18,7 @@
 
                 <div class="divider">IFES</div>
 
-                <c-htmx-form url="{% url 'signin' %}" class="space-y-4">
+                <c-htmx-form url="{% url 'signin' %}?{{ request.GET.urlencode }}" class="space-y-4">
                     <div id="form">
                         <c-django-form :form="form" />
                     </div>

@@ -37,14 +37,20 @@ class Turma(models.Model):
 class Oficina(models.Model):
     nome = models.CharField('Nome', max_length=150)
     local_padrao = models.CharField('Local padrão', max_length=200)
+    semestre = models.ForeignKey(
+        Semestre,
+        on_delete=models.PROTECT,
+        related_name='oficinas',
+        verbose_name='Semestre',
+    )
 
     class Meta:
         verbose_name = 'Oficina'
         verbose_name_plural = 'Oficinas'
-        ordering = ['nome']
+        ordering = ['-semestre__nome', 'nome']
 
     def __str__(self):
-        return self.nome
+        return f'{self.nome} — {self.semestre}'
 
 
 class Aluno(models.Model):
