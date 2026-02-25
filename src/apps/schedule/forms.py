@@ -58,7 +58,9 @@ class OficinaForm(forms.ModelForm):
             .select_related('turma')
             .order_by('turma__nome', 'nome')
         )
-        self.fields['alunos'].label_from_instance = lambda aluno: f'{aluno.nome} ({aluno.turma.nome})'
+        self.fields['alunos'].label_from_instance = lambda aluno: (
+            f'{aluno.nome} ({aluno.turma.nome})'
+        )
         if self.instance.pk:
             self.fields['alunos'].initial = self.instance.alunos.values_list(
                 'pk', flat=True
@@ -227,7 +229,9 @@ class EventoCriarForm(forms.Form):
         min_value=1,
     )
     oficinas = forms.ModelMultipleChoiceField(
-        queryset=Oficina.objects.filter(semestre__ativo=True).select_related('semestre'),
+        queryset=Oficina.objects.filter(semestre__ativo=True).select_related(
+            'semestre'
+        ),
         required=False,
         widget=forms.CheckboxSelectMultiple,
         label='Oficinas',

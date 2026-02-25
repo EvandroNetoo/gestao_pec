@@ -479,11 +479,15 @@ class OficinaBulkCreateView(View):
 
     def get(self, request):
         form = OficinaBulkForm()
-        return render(request, self.template_name, {
-            'form': form,
-            'page_title': 'Adicionar Oficinas em Lote',
-            'back_url': self.success_url,
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                'form': form,
+                'page_title': 'Adicionar Oficinas em Lote',
+                'back_url': self.success_url,
+            },
+        )
 
     def post(self, request):
         form = OficinaBulkForm(request.POST)
@@ -504,11 +508,15 @@ class OficinaBulkCreateView(View):
                 f'{len(oficinas)} oficina(s) adicionada(s) ao semestre {semestre}.',
             )
             return redirect(self.success_url)
-        return render(request, self.template_name, {
-            'form': form,
-            'page_title': 'Adicionar Oficinas em Lote',
-            'back_url': self.success_url,
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                'form': form,
+                'page_title': 'Adicionar Oficinas em Lote',
+                'back_url': self.success_url,
+            },
+        )
 
 
 # ═══════════════════════════════════════════════════════════════════
