@@ -38,9 +38,43 @@ class CopiarTurmaForm(forms.Form):
 
 # ── Oficina ────────────────────────────────────────────────────────
 class OficinaForm(forms.ModelForm):
+    alunos = forms.ModelMultipleChoiceField(
+        queryset=Aluno.objects.none(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label='Alunos',
+    )
+
     class Meta:
         model = Oficina
         fields = ['nome', 'local_padrao']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['alunos'].queryset = (
+            Aluno.objects
+            .filter(turma__semestre__ativo=True)
+            .select_related('turma', 'turma__semestre')
+            .order_by('turma__nome', 'nome')
+        )
+        if self.instance.pk:
+            self.fields['alunos'].initial = self.instance.alunos.values_list(
+                'pk', flat=True
+            )
+
+    def save(self, commit=True):
+        oficina = super().save(commit=commit)
+        if commit:
+            oficina.alunos.set(self.cleaned_data['alunos'])
+        else:
+            old_save_m2m = self.save_m2m
+
+            def save_m2m():
+                old_save_m2m()
+                oficina.alunos.set(self.cleaned_data['alunos'])
+
+            self.save_m2m = save_m2m
+        return oficina
 
 
 # ── Aluno ──────────────────────────────────────────────────────────
@@ -57,6 +91,34 @@ class AlunoForm(forms.ModelForm):
         self.fields['turma'].queryset = Turma.objects.filter(
             semestre__ativo=True
         ).select_related('semestre')
+
+
+class AlunoBulkForm(forms.Form):
+    """Adicionar vários alunos de uma vez, um nome por linha."""
+
+    turma = forms.ModelChoiceField(
+        queryset=Turma.objects.filter(semestre__ativo=True).select_related(
+            'semestre'
+        ),
+        label='Turma',
+    )
+    nomes = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                'rows': 10,
+                'placeholder': 'Digite um nome por linha\nEx:\nJoão Silva\nMaria Souza\nPedro Santos',
+            }
+        ),
+        label='Nomes dos alunos',
+        help_text='Um nome por linha. Linhas em branco serão ignoradas.',
+    )
+
+    def clean_nomes(self):
+        raw = self.cleaned_data['nomes']
+        nomes = [linha.strip() for linha in raw.splitlines() if linha.strip()]
+        if not nomes:
+            raise forms.ValidationError('Informe ao menos um nome.')
+        return nomes
 
 
 # ── Evento ─────────────────────────────────────────────────────────

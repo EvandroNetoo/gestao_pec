@@ -6,12 +6,14 @@
 
 {% endblock title %}
 
-
 {% block content %}
 
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <h1 class="text-2xl font-bold">Alunos</h1>
-        <a href="{% url 'aluno_create' %}" class="btn btn-primary btn-sm">+ Novo Aluno</a>
+        <div class="flex gap-2">
+            <a href="{% url 'aluno_bulk_create' %}" class="btn btn-secondary btn-sm">+ Adicionar em Lote</a>
+            <a href="{% url 'aluno_create' %}" class="btn btn-primary btn-sm">+ Novo Aluno</a>
+        </div>
     </div>
 
     <div class="card bg-base-100 shadow-sm">
@@ -27,7 +29,6 @@
                     <option value="">Todas as turmas</option>
 
                     {% for turma in turmas %}
-
 
                         <option value="{{ turma.pk }}" 
                             {% if turma_filtro == turma.pk|stringformat:"d" %}selected{% endif %}>{{ turma }}</option>
@@ -73,6 +74,7 @@
 
                                     {% for oficina in aluno.oficinas_fixas.all %}
 
+
                                         <span class="badge badge-sm badge-outline">{{ oficina.nome }}</span>
                                     {% empty %}
                                         <span class="text-base-content/40">—</span>
@@ -80,7 +82,7 @@
                                     {% endfor %}
                                 </td>
                                 <td>
-                                    <span class="badge badge-primary badge-sm">{{ aluno.total_presencas }} pts</span>
+                                    <span class="badge badge-primary badge-sm">{{ aluno.total_presencas|default:0 }} pts</span>
                                 </td>
                                 <td class="text-right">
                                     <div class="flex justify-end gap-1">

@@ -6,7 +6,6 @@
 
 {% endblock title %}
 
-
 {% block content %}
 
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
@@ -39,6 +38,7 @@
                         <tr>
                             <th>Nome</th>
                             <th>Local Padrão</th>
+                            <th>Alunos</th>
                             <th class="text-right">Ações</th>
                         </tr>
                     </thead>
@@ -46,10 +46,12 @@
 
                         {% for oficina in oficinas %}
 
-
                             <tr>
                                 <td class="font-medium">{{ oficina.nome }}</td>
                                 <td>{{ oficina.local_padrao }}</td>
+                                <td>
+                                    <span class="badge badge-neutral badge-sm">{{ oficina.total_alunos }}</span>
+                                </td>
                                 <td class="text-right">
                                     <div class="flex justify-end gap-1">
                                         <a href="{% url 'oficina_update' oficina.pk %}"
@@ -63,7 +65,7 @@
                         {% empty %}
 
                             <tr>
-                                <td colspan="3" class="text-center text-base-content/50 py-8">Nenhuma oficina encontrada.</td>
+                                <td colspan="4" class="text-center text-base-content/50 py-8">Nenhuma oficina encontrada.</td>
                             </tr>
 
                         {% endfor %}

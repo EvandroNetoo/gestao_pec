@@ -6,7 +6,6 @@
 
 {% endblock title %}
 
-
 {% block content %}
 
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
@@ -27,7 +26,6 @@
                     <option value="">Todos os semestres</option>
 
                     {% for semestre in semestres %}
-
 
                         <option value="{{ semestre.pk }}" 
                             {% if semestre_filtro == semestre.pk|stringformat:"d" %}selected{% endif %}>
@@ -64,6 +62,7 @@
 
                         {% for turma in turmas %}
 
+
                             <tr>
                                 <td class="font-medium">{{ turma.nome }}</td>
                                 <td>
@@ -76,6 +75,7 @@
                                         <span class="badge badge-success badge-xs">Ativo</span>
 
                                     {% else %}
+
 
                                         <span class="badge badge-ghost badge-xs">Inativo</span>
 

@@ -6,7 +6,6 @@
 
 {% endblock title %}
 
-
 {% block content %}
 
     <div class="flex items-center gap-2 mb-6">
@@ -60,7 +59,6 @@
 
                         {% for aloc in alocacoes %}
 
-
                             <tr>
                                 <td>{{ aloc.evento.titulo }}</td>
                                 <td>{{ aloc.evento.data_hora_inicio|date:"d/m/Y H:i" }}</td>
@@ -70,22 +68,22 @@
                                         {% if aloc.status == 'Ausente' %}badge-error{% endif %} 
                                         {% if aloc.status == 'Previsto' %}badge-warning{% endif %} 
                                         {% if aloc.status == 'Dispensado' %}badge-info{% endif %}">{{ aloc.status }}</span>
-                                </td>
-                                <td>{{ aloc.evento.peso_presenca }}</td>
-                            </tr>
+                                    </td>
+                                    <td>{{ aloc.evento.peso_presenca }}</td>
+                                </tr>
 
-                        {% empty %}
+                            {% empty %}
 
-                            <tr>
-                                <td colspan="4" class="text-center text-base-content/50 py-4">Nenhuma alocação.</td>
-                            </tr>
+                                <tr>
+                                    <td colspan="4" class="text-center text-base-content/50 py-4">Nenhuma alocação.</td>
+                                </tr>
 
-                        {% endfor %}
+                            {% endfor %}
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
 
-{% endblock content %}
+    {% endblock content %}

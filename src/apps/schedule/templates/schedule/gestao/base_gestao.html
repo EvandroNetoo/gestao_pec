@@ -102,57 +102,57 @@
 
                     <ul class="menu menu-md w-full flex-1">
                         <li>
-                            <a href="{% url 'dashboard' %}" class="
+                            <a href="{% url 'dashboard' %}" class=" 
                                 {% if request.resolver_match.url_name == 'dashboard' %}menu-active{% endif %}">📊 Dashboard</a>
-                        </li>
+                            </li>
 
-                        <li class="menu-title mt-4">Cadastros</li>
-                        <li>
-                            <a href="{% url 'semestre_list' %}" class="
-                                {% if 'semestre' in request.resolver_match.url_name %}menu-active{% endif %}">📆 Semestres</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'turma_list' %}" class="
-                                {% if 'turma' in request.resolver_match.url_name %}menu-active{% endif %}">🏫 Turmas</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'oficina_list' %}" class="
-                                {% if 'oficina' in request.resolver_match.url_name %}menu-active{% endif %}">🔧 Oficinas</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'aluno_list' %}" class="
-                                {% if 'aluno' in request.resolver_match.url_name %}menu-active{% endif %}">👤 Alunos</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'evento_list' %}" class="
-                                {% if 'evento' in request.resolver_match.url_name %}menu-active{% endif %}">📅 Eventos</a>
-                        </li>
+                            <li class="menu-title mt-4">Cadastros</li>
+                            <li>
+                                <a href="{% url 'semestre_list' %}" class=" 
+                                    {% if 'semestre' in request.resolver_match.url_name %}menu-active{% endif %}">📆 Semestres</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'turma_list' %}" class=" 
+                                        {% if 'turma' in request.resolver_match.url_name %}menu-active{% endif %}">🏫 Turmas</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'oficina_list' %}" class=" 
+                                            {% if 'oficina' in request.resolver_match.url_name %}menu-active{% endif %}">🔧 Oficinas</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'aluno_list' %}" class=" 
+                                                {% if 'aluno' in request.resolver_match.url_name %}menu-active{% endif %}">👤 Alunos</a>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'evento_list' %}" class=" 
+                                                    {% if 'evento' in request.resolver_match.url_name %}menu-active{% endif %}">📅 Eventos</a>
+                                                </li>
 
-                        <li class="menu-title mt-4">Relatórios</li>
-                        <li>
-                            <a href="{% url 'relatorio_geral' %}" class="
-                                {% if request.resolver_match.url_name == 'relatorio_geral' %}menu-active{% endif %}">📈 Resumo Geral</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'relatorio_turma' %}" class="
-                                {% if request.resolver_match.url_name == 'relatorio_turma' %}menu-active{% endif %}">📋 Por Turma</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'relatorio_evento' %}" class="
-                                {% if request.resolver_match.url_name == 'relatorio_evento' %}menu-active{% endif %}">📊 Por Evento</a>
-                        </li>
+                                                <li class="menu-title mt-4">Relatórios</li>
+                                                <li>
+                                                    <a href="{% url 'relatorio_geral' %}" class=" 
+                                                        {% if request.resolver_match.url_name == 'relatorio_geral' %}menu-active{% endif %}">📈 Resumo Geral</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{% url 'relatorio_turma' %}" class=" 
+                                                            {% if request.resolver_match.url_name == 'relatorio_turma' %}menu-active{% endif %}">📋 Por Turma</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{% url 'relatorio_evento' %}" class=" 
+                                                                {% if request.resolver_match.url_name == 'relatorio_evento' %}menu-active{% endif %}">📊 Por Evento</a>
+                                                            </li>
 
-                        <div class="divider"></div>
-                        <li>
-                            <a href="{% url 'home' %}">🌐 Agenda Pública</a>
-                        </li>
-                    </ul>
+                                                            <div class="divider"></div>
+                                                            <li>
+                                                                <a href="{% url 'home' %}">🌐 Agenda Pública</a>
+                                                            </li>
+                                                        </ul>
 
-                    <div class="px-2 py-4 text-xs text-base-content/50">{{ request.user.get_full_name|default:request.user.email }}</div>
-                </aside>
-            </div>
-        </div>
+                                                        <div class="px-2 py-4 text-xs text-base-content/50">{{ request.user.get_full_name|default:request.user.email }}</div>
+                                                    </aside>
+                                                </div>
+                                            </div>
 
-    </body>
+                                        </body>
 
-</html>
+                                    </html>

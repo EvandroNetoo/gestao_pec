@@ -85,15 +85,13 @@
                 navLinks: true,
                 editable: false,
                 dayMaxEvents: isMobile ? 2 : true,
-                titleFormat: isMobile ?
-                    {
-                        month: 'short',
-                        year: 'numeric'
-                    } :
-                    {
-                        month: 'long',
-                        year: 'numeric'
-                    },
+                titleFormat: isMobile ? {
+                    month: 'short',
+                    year: 'numeric'
+                } : {
+                    month: 'long',
+                    year: 'numeric'
+                },
             });
             calendar.render();
         });

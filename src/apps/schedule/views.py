@@ -6,6 +6,7 @@ from django.db.models import (
     Case,
     Count,
     IntegerField,
+    Q,
     Sum,
     Value,
     When,
@@ -26,6 +27,7 @@ from django.views.generic import (
 
 from schedule.forms import (
     AlocarAlunosForm,
+    AlunoBulkForm,
     AlunoForm,
     CopiarTurmaForm,
     EventoCriarForm,
@@ -391,7 +393,17 @@ class OficinaListView(ListView):
     context_object_name = 'oficinas'
 
     def get_queryset(self):
-        qs = super().get_queryset()
+        qs = (
+            super()
+            .get_queryset()
+            .annotate(
+                total_alunos=Count(
+                    'alunos',
+                    filter=Q(alunos__turma__semestre__ativo=True),
+                ),
+            )
+            .order_by('nome')
+        )
         q = self.request.GET.get('q', '').strip()
         if q:
             qs = qs.filter(nome__icontains=q)
@@ -471,6 +483,19 @@ class AlunoListView(ListView):
             .select_related('turma', 'turma__semestre')
             .prefetch_related('oficinas_fixas')
             .filter(turma__semestre__ativo=True)
+            .annotate(
+                total_presencas=Sum(
+                    Case(
+                        When(
+                            alocacoes__status=AlocacaoPresenca.Status.PRESENTE,
+                            alocacoes__evento__cancelado=False,
+                            then='alocacoes__evento__peso_presenca',
+                        ),
+                        default=Value(0),
+                        output_field=IntegerField(),
+                    )
+                ),
+            )
         )
         q = self.request.GET.get('q', '').strip()
         if q:
@@ -539,6 +564,47 @@ class AlunoDeleteView(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, 'Aluno excluído com sucesso.')
         return super().form_valid(form)
+
+
+class AlunoBulkCreateView(View):
+    """Adicionar vários alunos de uma vez."""
+
+    template_name = 'schedule/gestao/aluno_bulk.html'
+    success_url = reverse_lazy('aluno_list')
+
+    def get(self, request):
+        form = AlunoBulkForm()
+        return render(
+            request,
+            self.template_name,
+            {
+                'form': form,
+                'page_title': 'Adicionar Alunos em Lote',
+                'back_url': self.success_url,
+            },
+        )
+
+    def post(self, request):
+        form = AlunoBulkForm(request.POST)
+        if form.is_valid():
+            turma = form.cleaned_data['turma']
+            nomes = form.cleaned_data['nomes']
+            alunos = [Aluno(nome=nome, turma=turma) for nome in nomes]
+            Aluno.objects.bulk_create(alunos)
+            messages.success(
+                request,
+                f'{len(alunos)} aluno(s) adicionado(s) à turma {turma}.',
+            )
+            return redirect(self.success_url)
+        return render(
+            request,
+            self.template_name,
+            {
+                'form': form,
+                'page_title': 'Adicionar Alunos em Lote',
+                'back_url': self.success_url,
+            },
+        )
 
 
 class AlunoDetailView(DetailView):

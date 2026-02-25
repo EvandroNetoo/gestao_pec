@@ -106,6 +106,11 @@ urlpatterns = [
         name='aluno_create',
     ),
     path(
+        'gestao/alunos/lote/',
+        views.AlunoBulkCreateView.as_view(),
+        name='aluno_bulk_create',
+    ),
+    path(
         'gestao/alunos/<int:pk>/',
         views.AlunoDetailView.as_view(),
         name='aluno_detail',
