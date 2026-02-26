@@ -66,8 +66,6 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = 'core.asgi.application'
-
 
 # Database
 
@@ -82,7 +80,7 @@ DATABASES = {
 
 # Password validation
 
-AUTH_PASSWORD_VALIDATORS: list[dict[str, str]] = [
+AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
@@ -122,7 +120,6 @@ STORAGES = {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
 }
-WHITENOISE_MANIFEST_STRICT = False
 
 
 # Media files (uploads)
@@ -137,7 +134,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 COTTON_DIR = 'components'
 
-# Logging Configuration for Production (Railway, Heroku, etc.)
+
+if DEBUG:
+    INSTALLED_APPS.append('debug_toolbar')
+    MIDDLEWARE.insert(
+        MIDDLEWARE.index('django.middleware.common.CommonMiddleware') + 1,
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    )
+
+    def show_toolbar(request):
+        return True
+
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': 'core.settings.show_toolbar',
+    }
+
+
 if not DEBUG:
     LOGGING = {
         'version': 1,
@@ -182,21 +194,4 @@ if not DEBUG:
                 'propagate': False,
             },
         },
-    }
-
-# Django Debug Toolbar
-if DEBUG:
-    INSTALLED_APPS.append('debug_toolbar')
-    MIDDLEWARE.insert(
-        MIDDLEWARE.index('django.middleware.common.CommonMiddleware') + 1,
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    )
-
-    # Em produção (Railway), o IP do cliente muda por causa do proxy reverso.
-    # Para forçar a exibição da barra quando DEBUG=True, usamos uma função customizada.
-    def show_toolbar(request):
-        return True
-
-    DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': 'core.settings.show_toolbar',
     }

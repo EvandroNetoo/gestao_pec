@@ -27,7 +27,6 @@ from django.views.generic import (
 from django_htmx.http import HttpResponseClientRedirect
 
 from core.mixins import HtmxFormViewMixin
-
 from schedule.forms import (
     AlocarAlunosForm,
     AlunoBulkForm,
@@ -770,9 +769,7 @@ class EventoCreateView(View):
                 request,
                 f'{criados} evento(s) criado(s) com sucesso.',
             )
-            return HttpResponseClientRedirect(
-                str(reverse_lazy('evento_list'))
-            )
+            return HttpResponseClientRedirect(str(reverse_lazy('evento_list')))
 
         return render(
             request,
