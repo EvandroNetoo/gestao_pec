@@ -18,16 +18,16 @@
 
         <div class="card bg-base-100 shadow-sm">
             <div class="card-body">
-                <form method="post">
-                    {% csrf_token %}
-
-                    <c-django-form :form="form" />
+                <c-htmx-form url="{{ request.path }}" class="space-y-4">
+                    <div id="form">
+                        <c-django-form :form="form" />
+                    </div>
 
                     <div class="card-actions justify-end mt-6">
                         <a href="{{ back_url }}" class="btn btn-ghost">Cancelar</a>
                         <button type="submit" class="btn btn-primary">Adicionar Oficinas</button>
                     </div>
-                </form>
+                </c-htmx-form>
             </div>
         </div>
     </div>

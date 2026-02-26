@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import DateTimeInput
 
+from core.mixins import NoRequiredAttrFormMixin
 from schedule.models import (
     AlocacaoPresenca,
     Aluno,
@@ -12,14 +13,14 @@ from schedule.models import (
 
 
 # ── Semestre ───────────────────────────────────────────────────────
-class SemestreForm(forms.ModelForm):
+class SemestreForm(NoRequiredAttrFormMixin, forms.ModelForm):
     class Meta:
         model = Semestre
         fields = ['nome', 'ativo']
 
 
 # ── Turma ──────────────────────────────────────────────────────────
-class TurmaForm(forms.ModelForm):
+class TurmaForm(NoRequiredAttrFormMixin, forms.ModelForm):
     class Meta:
         model = Turma
         fields = ['nome', 'semestre']
@@ -29,7 +30,7 @@ class TurmaForm(forms.ModelForm):
         self.fields['semestre'].queryset = Semestre.objects.filter(ativo=True)
 
 
-class CopiarTurmaForm(forms.Form):
+class CopiarTurmaForm(NoRequiredAttrFormMixin, forms.Form):
     semestre_destino = forms.ModelChoiceField(
         queryset=Semestre.objects.filter(ativo=True),
         label='Semestre de destino',
@@ -37,7 +38,7 @@ class CopiarTurmaForm(forms.Form):
 
 
 # ── Oficina ────────────────────────────────────────────────────────
-class OficinaForm(forms.ModelForm):
+class OficinaForm(NoRequiredAttrFormMixin, forms.ModelForm):
     alunos = forms.ModelMultipleChoiceField(
         queryset=Aluno.objects.none(),
         widget=forms.CheckboxSelectMultiple,
@@ -81,7 +82,7 @@ class OficinaForm(forms.ModelForm):
         return oficina
 
 
-class OficinaBulkForm(forms.Form):
+class OficinaBulkForm(NoRequiredAttrFormMixin, forms.Form):
     """Adicionar várias oficinas de uma vez, uma por linha."""
 
     semestre = forms.ModelChoiceField(
@@ -128,7 +129,7 @@ class OficinaBulkForm(forms.Form):
 
 
 # ── Aluno ──────────────────────────────────────────────────────────
-class AlunoForm(forms.ModelForm):
+class AlunoForm(NoRequiredAttrFormMixin, forms.ModelForm):
     class Meta:
         model = Aluno
         fields = ['nome', 'turma', 'oficinas_fixas']
@@ -146,7 +147,7 @@ class AlunoForm(forms.ModelForm):
         ).select_related('semestre')
 
 
-class AlunoBulkForm(forms.Form):
+class AlunoBulkForm(NoRequiredAttrFormMixin, forms.Form):
     """Adicionar vários alunos de uma vez, um nome por linha."""
 
     turma = forms.ModelChoiceField(
@@ -177,7 +178,7 @@ class AlunoBulkForm(forms.Form):
 # ── Evento ─────────────────────────────────────────────────────────
 
 
-class EventoCriarForm(forms.Form):
+class EventoCriarForm(NoRequiredAttrFormMixin, forms.Form):
     """Formulário para criar evento(s), com suporte a recorrência."""
 
     PERIODO_CHOICES = [
@@ -276,7 +277,7 @@ class EventoCriarForm(forms.Form):
         return cleaned
 
 
-class EventoForm(forms.ModelForm):
+class EventoForm(NoRequiredAttrFormMixin, forms.ModelForm):
     """Formulário para editar um evento existente."""
 
     class Meta:
@@ -325,13 +326,13 @@ class EventoForm(forms.ModelForm):
 
 
 # ── Alocação / Presença ───────────────────────────────────────────
-class AlocacaoPresencaForm(forms.ModelForm):
+class AlocacaoPresencaForm(NoRequiredAttrFormMixin, forms.ModelForm):
     class Meta:
         model = AlocacaoPresenca
         fields = ['aluno', 'status']
 
 
-class AlocarAlunosForm(forms.Form):
+class AlocarAlunosForm(NoRequiredAttrFormMixin, forms.Form):
     """Seleciona múltiplos alunos para alocar de uma vez."""
 
     alunos = forms.ModelMultipleChoiceField(
@@ -353,7 +354,7 @@ class AlocarAlunosForm(forms.Form):
 
 
 # ── Presença (público) ────────────────────────────────────────────
-class PresencaForm(forms.Form):
+class PresencaForm(NoRequiredAttrFormMixin, forms.Form):
     """Formulário dinâmico para registrar presenças de um evento."""
 
     def __init__(self, *args, evento: Evento, **kwargs):

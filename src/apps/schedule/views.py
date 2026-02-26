@@ -24,6 +24,9 @@ from django.views.generic import (
     TemplateView,
     UpdateView,
 )
+from django_htmx.http import HttpResponseClientRedirect
+
+from core.mixins import HtmxFormViewMixin
 
 from schedule.forms import (
     AlocarAlunosForm,
@@ -213,7 +216,7 @@ class SemestreListView(ListView):
         return qs
 
 
-class SemestreCreateView(CreateView):
+class SemestreCreateView(HtmxFormViewMixin, CreateView):
     model = Semestre
     form_class = SemestreForm
     template_name = 'schedule/gestao/form.html'
@@ -230,7 +233,7 @@ class SemestreCreateView(CreateView):
         return super().form_valid(form)
 
 
-class SemestreUpdateView(UpdateView):
+class SemestreUpdateView(HtmxFormViewMixin, UpdateView):
     model = Semestre
     form_class = SemestreForm
     template_name = 'schedule/gestao/form.html'
@@ -297,7 +300,7 @@ class TurmaListView(ListView):
         return ctx
 
 
-class TurmaCreateView(CreateView):
+class TurmaCreateView(HtmxFormViewMixin, CreateView):
     model = Turma
     form_class = TurmaForm
     template_name = 'schedule/gestao/form.html'
@@ -314,7 +317,7 @@ class TurmaCreateView(CreateView):
         return super().form_valid(form)
 
 
-class TurmaUpdateView(UpdateView):
+class TurmaUpdateView(HtmxFormViewMixin, UpdateView):
     model = Turma
     form_class = TurmaForm
     template_name = 'schedule/gestao/form.html'
@@ -373,15 +376,11 @@ class TurmaCopiarView(View):
                 request,
                 f'Turma copiada: {nova} ({nova.alunos.count()} alunos).',
             )
-            return redirect('turma_list')
+            return HttpResponseClientRedirect(str(reverse_lazy('turma_list')))
         return render(
             request,
-            'schedule/gestao/form.html',
-            {
-                'form': form,
-                'page_title': f'Copiar Turma: {turma}',
-                'back_url': reverse_lazy('turma_list'),
-            },
+            'components/django_form/index.html',
+            {'form': form},
         )
 
 
@@ -420,7 +419,7 @@ class OficinaListView(ListView):
         return ctx
 
 
-class OficinaCreateView(CreateView):
+class OficinaCreateView(HtmxFormViewMixin, CreateView):
     model = Oficina
     form_class = OficinaForm
     template_name = 'schedule/gestao/form.html'
@@ -437,7 +436,7 @@ class OficinaCreateView(CreateView):
         return super().form_valid(form)
 
 
-class OficinaUpdateView(UpdateView):
+class OficinaUpdateView(HtmxFormViewMixin, UpdateView):
     model = Oficina
     form_class = OficinaForm
     template_name = 'schedule/gestao/form.html'
@@ -507,15 +506,11 @@ class OficinaBulkCreateView(View):
                 request,
                 f'{len(oficinas)} oficina(s) adicionada(s) ao semestre {semestre}.',
             )
-            return redirect(self.success_url)
+            return HttpResponseClientRedirect(str(self.success_url))
         return render(
             request,
-            self.template_name,
-            {
-                'form': form,
-                'page_title': 'Adicionar Oficinas em Lote',
-                'back_url': self.success_url,
-            },
+            'components/django_form/index.html',
+            {'form': form},
         )
 
 
@@ -568,7 +563,7 @@ class AlunoListView(ListView):
         return ctx
 
 
-class AlunoCreateView(CreateView):
+class AlunoCreateView(HtmxFormViewMixin, CreateView):
     model = Aluno
     form_class = AlunoForm
     template_name = 'schedule/gestao/form.html'
@@ -585,7 +580,7 @@ class AlunoCreateView(CreateView):
         return super().form_valid(form)
 
 
-class AlunoUpdateView(UpdateView):
+class AlunoUpdateView(HtmxFormViewMixin, UpdateView):
     model = Aluno
     form_class = AlunoForm
     template_name = 'schedule/gestao/form.html'
@@ -648,15 +643,11 @@ class AlunoBulkCreateView(View):
                 request,
                 f'{len(alunos)} aluno(s) adicionado(s) à turma {turma}.',
             )
-            return redirect(self.success_url)
+            return HttpResponseClientRedirect(str(self.success_url))
         return render(
             request,
-            self.template_name,
-            {
-                'form': form,
-                'page_title': 'Adicionar Alunos em Lote',
-                'back_url': self.success_url,
-            },
+            'components/django_form/index.html',
+            {'form': form},
         )
 
 
@@ -779,20 +770,18 @@ class EventoCreateView(View):
                 request,
                 f'{criados} evento(s) criado(s) com sucesso.',
             )
-            return redirect('evento_list')
+            return HttpResponseClientRedirect(
+                str(reverse_lazy('evento_list'))
+            )
 
         return render(
             request,
-            self.template_name,
-            {
-                'form': form,
-                'page_title': 'Novo Evento',
-                'back_url': reverse_lazy('evento_list'),
-            },
+            'schedule/gestao/evento_criar_form.html',
+            {'form': form},
         )
 
 
-class EventoUpdateView(UpdateView):
+class EventoUpdateView(HtmxFormViewMixin, UpdateView):
     model = Evento
     form_class = EventoForm
     template_name = 'schedule/gestao/form.html'
@@ -885,17 +874,13 @@ class EventoAlocarView(View):
                 )
             for erro in erros:
                 messages.error(request, erro)
-            return redirect('evento_detail_gestao', pk=pk)
+            return HttpResponseClientRedirect(
+                str(reverse_lazy('evento_detail_gestao', kwargs={'pk': pk}))
+            )
         return render(
             request,
-            'schedule/gestao/form.html',
-            {
-                'form': form,
-                'page_title': f'Alocar Alunos — {evento.titulo}',
-                'back_url': reverse_lazy(
-                    'evento_detail_gestao', kwargs={'pk': pk}
-                ),
-            },
+            'components/django_form/index.html',
+            {'form': form},
         )
 
 

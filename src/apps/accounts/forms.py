@@ -2,9 +2,10 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, BaseUserCreationForm
 
 from accounts.models import User
+from core.mixins import NoRequiredAttrFormMixin
 
 
-class SignupForm(BaseUserCreationForm):
+class SignupForm(NoRequiredAttrFormMixin, BaseUserCreationForm):
     class Meta:
         model = User
         fields = [
@@ -29,7 +30,7 @@ class SignupForm(BaseUserCreationForm):
             field.required = True
 
 
-class SigninForm(AuthenticationForm):
+class SigninForm(NoRequiredAttrFormMixin, AuthenticationForm):
     def get_invalid_login_error(self):
         return forms.ValidationError(
             'Credenciais inválidas.',
@@ -40,7 +41,6 @@ class SigninForm(AuthenticationForm):
         return username.lower()
 
     def __init__(self, *args, **kwargs):
-        kwargs['use_required_attribute'] = False
         super().__init__(*args, **kwargs)
 
         self.fields['username'].widget.attrs['autofocus'] = False
@@ -53,7 +53,7 @@ class SigninForm(AuthenticationForm):
             field.widget.attrs['placeholder'] = placeholders[field_name]
 
 
-class WidgetsShowcaseForm(forms.Form):
+class WidgetsShowcaseForm(NoRequiredAttrFormMixin, forms.Form):
     text = forms.CharField(
         label='Texto',
         help_text='Digite de 3 a 40 caracteres.',
@@ -150,7 +150,6 @@ class WidgetsShowcaseForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        kwargs['use_required_attribute'] = False
         super().__init__(*args, **kwargs)
 
         self.fields['text'].error_messages.update(
