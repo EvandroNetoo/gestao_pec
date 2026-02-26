@@ -1,6 +1,40 @@
-{% load widget_tweaks %}
+{% load widget_tweaks utils %}
 
-{% if field.field.widget.input_type == 'checkbox' %}
+{% if field.field.widget|klass == 'CheckboxInput' %}
+
+    <label for="{{ field.id_for_label }}" class="flex gap-2 w-fit items-center">
+        {{ field|add_class:'toggle toggle-sm toggle-neutral' }}
+
+        <span class="fieldset-legend flex items-center justify-start gap-1">
+            {{ field.label }}
+
+            {% if field.field.required %}<span class="text-error">*</span>{% endif %}
+        </span>
+
+    </label>
+
+{% elif field.field.widget|klass == 'CheckboxSelectMultiple' %}
+
+    <div id="{{ field.id_for_label }}">
+
+        {% for checkbox in field %}
+
+            <div>
+                <label for="{{ checkbox.id_for_label }}"
+                       class="label flex gap-1 items-center w-fit">
+
+                    {{ checkbox|add_class:'checkbox checkbox-xs checkbox-neutral rounded-sm' }}
+
+                    {{ checkbox.choice_label }}
+
+                </label>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% elif field.field.widget.input_type == 'checkbox' %}
 
     {{ field }}
 
@@ -21,6 +55,7 @@
     {{ field|add_class:'textarea textarea-neutral w-full' }}
 
 {% else %}
+
 
     {{ field|add_class:'input input-neutral w-full' }}
 

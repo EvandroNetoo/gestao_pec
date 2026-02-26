@@ -17,7 +17,11 @@
             {% if evento.tipo == 'Periódico' %}badge-info{% endif %} 
             {% if evento.tipo == 'Esporádico' %}badge-error{% endif %}">{{ evento.tipo }}</span>
 
-            {% if evento.cancelado %}<span class="badge badge-error badge-outline">Cancelado</span>{% endif %}
+            {% if evento.cancelado %}
+
+                <span class="badge badge-error badge-outline">Cancelado</span>
+
+            {% endif %}
 
         </div>
 
@@ -39,14 +43,18 @@
 
                 {% if evento.cancelado %}
 
-                    <button type="submit" class="btn btn-sm btn-success btn-outline">✅ Restaurar Evento</button>
+                    <button type="submit" class="btn btn-sm btn-success btn-outline">
+                        ✅ Restaurar Evento
+                    </button>
 
                 {% else %}
 
 
                     <button type="submit"
                             class="btn btn-sm btn-warning btn-outline"
-                            onclick="return confirm('Deseja cancelar este evento?')">🚫 Cancelar Evento</button>
+                            onclick="return confirm('Deseja cancelar este evento?')">
+                        🚫 Cancelar Evento
+                    </button>
 
                 {% endif %}
             </form>
@@ -55,11 +63,15 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div class="stat bg-base-100 rounded-box shadow-sm">
                 <div class="stat-title">Data</div>
-                <div class="stat-value text-lg">{{ evento.data_hora_inicio|date:"d/m/Y" }}</div>
+                <div class="stat-value text-lg">
+                    {{ evento.data_hora_inicio|date:"d/m/Y" }}
+                </div>
             </div>
             <div class="stat bg-base-100 rounded-box shadow-sm">
                 <div class="stat-title">Horário</div>
-                <div class="stat-value text-lg">{{ evento.data_hora_inicio|time:"H:i" }} — {{ evento.data_hora_fim|time:"H:i" }}</div>
+                <div class="stat-value text-lg">
+                    {{ evento.data_hora_inicio|time:"H:i" }} — {{ evento.data_hora_fim|time:"H:i" }}
+                </div>
             </div>
             <div class="stat bg-base-100 rounded-box shadow-sm">
                 <div class="stat-title">Local</div>
@@ -76,7 +88,10 @@
             <div class="mb-4 flex flex-wrap gap-2 items-center">
                 <span class="font-semibold text-sm">Oficinas:</span>
 
-                {% for oficina in evento.oficinas.all %}<span class="badge badge-outline">{{ oficina.nome }}</span>{% endfor %}
+                {% for oficina in evento.oficinas.all %}
+                    <span class="badge badge-outline">{{ oficina.nome }}</span>
+
+                {% endfor %}
 
             </div>
 
@@ -135,7 +150,9 @@
                                                 {% csrf_token %}
                                                 <button type="submit"
                                                         class="btn btn-ghost btn-xs text-error"
-                                                        title="Remover alocação">🗑️</button>
+                                                        title="Remover alocação">
+                                                    🗑️
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>
@@ -143,7 +160,9 @@
                                 {% empty %}
 
                                     <tr>
-                                        <td colspan="4" class="text-center text-base-content/50 py-4">Nenhum aluno alocado.</td>
+                                        <td colspan="4" class="text-center text-base-content/50 py-4">
+                                            Nenhum aluno alocado.
+                                        </td>
                                     </tr>
 
                                 {% endfor %}

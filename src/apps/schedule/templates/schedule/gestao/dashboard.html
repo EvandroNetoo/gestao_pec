@@ -78,7 +78,9 @@
                                             {% if evento.tipo == 'Esporádico' %}badge-error{% endif %}">{{ evento.tipo }}</span>
                                         </td>
                                         <td>{{ evento.data_hora_inicio|date:"d/m/Y" }}</td>
-                                        <td>{{ evento.data_hora_inicio|time:"H:i" }} — {{ evento.data_hora_fim|time:"H:i" }}</td>
+                                        <td>
+                                            {{ evento.data_hora_inicio|time:"H:i" }} — {{ evento.data_hora_fim|time:"H:i" }}
+                                        </td>
                                     </tr>
 
                                 {% endfor %}

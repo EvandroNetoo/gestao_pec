@@ -56,7 +56,6 @@
 
                         {% for evento in eventos %}
 
-
                             <tr>
                                 <td class="font-medium">
                                     <a href="{% url 'evento_detail_gestao' evento.pk %}"
@@ -99,7 +98,9 @@
                             {% empty %}
 
                                 <tr>
-                                    <td colspan="7" class="text-center text-base-content/50 py-8">Nenhum evento encontrado.</td>
+                                    <td colspan="7" class="text-center text-base-content/50 py-8">
+                                        Nenhum evento encontrado.
+                                    </td>
                                 </tr>
 
                             {% endfor %}

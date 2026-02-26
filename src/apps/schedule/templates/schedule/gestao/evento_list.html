@@ -60,7 +60,6 @@
 
                         {% for evento in eventos %}
 
-
                             <tr 
                                 {% if evento.cancelado %}class="opacity-50"{% endif %}>
                                 <td>
@@ -95,7 +94,9 @@
                                         {% endif %}
                                     </td>
                                     <td>{{ evento.data_hora_inicio|date:"d/m/Y" }}</td>
-                                    <td>{{ evento.data_hora_inicio|time:"H:i" }} — {{ evento.data_hora_fim|time:"H:i" }}</td>
+                                    <td>
+                                        {{ evento.data_hora_inicio|time:"H:i" }} — {{ evento.data_hora_fim|time:"H:i" }}
+                                    </td>
                                     <td>{{ evento.get_local_definitivo }}</td>
                                     <td>
                                         <span class="badge badge-neutral badge-sm">{{ evento.total_alocados }}</span>
@@ -121,7 +122,9 @@
                             {% empty %}
 
                                 <tr>
-                                    <td colspan="7" class="text-center text-base-content/50 py-8">Nenhum evento encontrado.</td>
+                                    <td colspan="7" class="text-center text-base-content/50 py-8">
+                                        Nenhum evento encontrado.
+                                    </td>
                                 </tr>
 
                             {% endfor %}

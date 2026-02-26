@@ -61,7 +61,6 @@
 
                         {% for aluno in alunos %}
 
-
                             <tr>
                                 <td>
                                     <a href="{% url 'aluno_detail' aluno.pk %}"
@@ -73,7 +72,6 @@
                                 <td>
 
                                     {% for oficina in aluno.oficinas_fixas.all %}
-
 
                                         <span class="badge badge-sm badge-outline whitespace-nowrap">{{ oficina.nome }}</span>
                                     {% empty %}
@@ -99,7 +97,9 @@
                         {% empty %}
 
                             <tr>
-                                <td colspan="5" class="text-center text-base-content/50 py-8">Nenhum aluno encontrado.</td>
+                                <td colspan="5" class="text-center text-base-content/50 py-8">
+                                    Nenhum aluno encontrado.
+                                </td>
                             </tr>
 
                         {% endfor %}

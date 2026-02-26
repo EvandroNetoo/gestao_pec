@@ -83,7 +83,9 @@
                                         {% if aloc.evento.tipo == 'Esporádico' %}badge-error{% endif %}">{{ aloc.evento.tipo }}</span>
                                     </td>
                                     <td>{{ aloc.evento.data_hora_inicio|date:"d/m/Y" }}</td>
-                                    <td>{{ aloc.evento.data_hora_inicio|time:"H:i" }} — {{ aloc.evento.data_hora_fim|time:"H:i" }}</td>
+                                    <td>
+                                        {{ aloc.evento.data_hora_inicio|time:"H:i" }} — {{ aloc.evento.data_hora_fim|time:"H:i" }}
+                                    </td>
                                     <td>{{ aloc.evento.get_local_definitivo }}</td>
                                     <td>{{ aloc.evento.peso_presenca }}</td>
                                     <td>
@@ -98,7 +100,9 @@
                                 {% empty %}
 
                                     <tr>
-                                        <td colspan="7" class="text-center text-base-content/50 py-8">Nenhuma alocação encontrada.</td>
+                                        <td colspan="7" class="text-center text-base-content/50 py-8">
+                                            Nenhuma alocação encontrada.
+                                        </td>
                                     </tr>
 
                                 {% endfor %}

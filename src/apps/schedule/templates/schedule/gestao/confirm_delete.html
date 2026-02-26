@@ -11,7 +11,11 @@
     <div class="max-w-lg mx-auto">
         <div class="flex items-center gap-2 mb-6">
 
-            {% if back_url %}<a href="{{ back_url }}" class="btn btn-ghost btn-sm btn-circle">←</a>{% endif %}
+            {% if back_url %}
+
+                <a href="{{ back_url }}" class="btn btn-ghost btn-sm btn-circle">←</a>
+
+            {% endif %}
 
             <h1 class="text-2xl font-bold">{{ page_title }}</h1>
         </div>

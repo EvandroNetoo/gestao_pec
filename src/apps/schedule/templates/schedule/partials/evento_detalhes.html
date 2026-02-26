@@ -8,13 +8,19 @@
                 {% if evento.tipo == 'Esporádico' %}badge-error{% endif %}">{{ evento.tipo }}</span>
                 <span class="badge badge-outline">Peso: {{ evento.peso_presenca }}</span>
 
-                {% if evento.cancelado %}<span class="badge badge-error badge-outline">Cancelado</span>{% endif %}
+                {% if evento.cancelado %}
+
+                    <span class="badge badge-error badge-outline">Cancelado</span>
+
+                {% endif %}
 
             </div>
 
             {% if evento.cancelado %}
 
-                <div role="alert" class="alert alert-warning alert-sm mt-2">⚠️ Evento cancelado</div>
+                <div role="alert" class="alert alert-warning alert-sm mt-2">
+                    ⚠️ Evento cancelado
+                </div>
 
             {% endif %}
 
@@ -35,7 +41,6 @@
                     <span class="font-semibold">🏷️ Oficinas:</span>
 
                     {% for oficina in evento.oficinas.all %}
-
 
                         <span class="badge badge-sm badge-ghost">{{ oficina.nome }}</span>
                     {% empty %}
@@ -62,7 +67,6 @@
 
                             {% for alocacao in alocacoes %}
 
-
                                 <tr>
                                     <td>{{ alocacao.aluno.nome }}</td>
                                     <td>
@@ -81,7 +85,9 @@
                 {% else %}
 
 
-                    <p class="text-base-content/50 text-sm text-center py-2">Nenhum aluno alocado.</p>
+                    <p class="text-base-content/50 text-sm text-center py-2">
+                        Nenhum aluno alocado.
+                    </p>
 
                 {% endif %}
 

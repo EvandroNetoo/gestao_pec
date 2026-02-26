@@ -16,7 +16,10 @@
     </label>
     {{ form.titulo|add_class:'input input-neutral w-full' }}
 
-    {% for error in form.titulo.errors %}<p class="text-error">{{ error }}</p>{% endfor %}
+    {% for error in form.titulo.errors %}
+        <p class="text-error">{{ error }}</p>
+
+    {% endfor %}
 </fieldset>
 
 {# ── Tipo ───────────────────────────── #}
@@ -26,7 +29,10 @@
     </label>
     {{ form.tipo|add_class:'select select-neutral w-full' }}
 
-    {% for error in form.tipo.errors %}<p class="text-error">{{ error }}</p>{% endfor %}
+    {% for error in form.tipo.errors %}
+        <p class="text-error">{{ error }}</p>
+
+    {% endfor %}
 </fieldset>
 
 {# ── Data Inicial ───────────────────── #}
@@ -36,7 +42,10 @@
     </label>
     {{ form.data|add_class:'input input-neutral w-full' }}
 
-    {% for error in form.data.errors %}<p class="text-error">{{ error }}</p>{% endfor %}
+    {% for error in form.data.errors %}
+        <p class="text-error">{{ error }}</p>
+
+    {% endfor %}
 </fieldset>
 
 {# ── Horários ───────────────────────── #}
@@ -47,7 +56,10 @@
         </label>
         {{ form.hora_inicio|add_class:'input input-neutral w-full' }}
 
-        {% for error in form.hora_inicio.errors %}<p class="text-error">{{ error }}</p>{% endfor %}
+        {% for error in form.hora_inicio.errors %}
+            <p class="text-error">{{ error }}</p>
+
+        {% endfor %}
     </fieldset>
     <fieldset class="fieldset">
         <label for="id_hora_fim" class="fieldset-legend">
@@ -55,14 +67,19 @@
         </label>
         {{ form.hora_fim|add_class:'input input-neutral w-full' }}
 
-        {% for error in form.hora_fim.errors %}<p class="text-error">{{ error }}</p>{% endfor %}
+        {% for error in form.hora_fim.errors %}
+            <p class="text-error">{{ error }}</p>
+
+        {% endfor %}
     </fieldset>
 </div>
 
 {# ── Campos de Recorrência (visíveis apenas para Periódico) ── #}
 <div id="recorrencia-fields" class=" 
     {% if form.tipo.value != 'Periódico' %}hidden{% endif %} border border-base-300 rounded-box p-4 mt-2 space-y-2 bg-base-200/30">
-    <p class="text-sm font-semibold text-base-content/70 mb-2">Opções de Recorrência</p>
+    <p class="text-sm font-semibold text-base-content/70 mb-2">
+        Opções de Recorrência
+    </p>
 
     <fieldset class="fieldset">
         <label for="id_periodo" class="fieldset-legend">
@@ -70,7 +87,10 @@
         </label>
         {{ form.periodo|add_class:'select select-neutral w-full' }}
 
-        {% for error in form.periodo.errors %}<p class="text-error">{{ error }}</p>{% endfor %}
+        {% for error in form.periodo.errors %}
+            <p class="text-error">{{ error }}</p>
+
+        {% endfor %}
     </fieldset>
 
     <fieldset class="fieldset 
@@ -80,7 +100,10 @@
         </label>
         {{ form.intervalo_dias|add_class:'input input-neutral w-full' }}
 
-        {% for error in form.intervalo_dias.errors %}<p class="text-error">{{ error }}</p>{% endfor %}
+        {% for error in form.intervalo_dias.errors %}
+            <p class="text-error">{{ error }}</p>
+
+        {% endfor %}
     </fieldset>
 
     <fieldset class="fieldset">
@@ -89,7 +112,10 @@
         </label>
         {{ form.data_fim_recorrencia|add_class:'input input-neutral w-full' }}
 
-        {% for error in form.data_fim_recorrencia.errors %}<p class="text-error">{{ error }}</p>{% endfor %}
+        {% for error in form.data_fim_recorrencia.errors %}
+            <p class="text-error">{{ error }}</p>
+
+        {% endfor %}
     </fieldset>
 </div>
 

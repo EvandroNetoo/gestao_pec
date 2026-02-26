@@ -56,7 +56,6 @@
 
                             {% for dado in dados_alunos %}
 
-
                                 <tr>
                                     <td class="font-medium">{{ dado.aluno.nome }}</td>
                                     <td class="text-center">
@@ -86,7 +85,9 @@
                             {% empty %}
 
                                 <tr>
-                                    <td colspan="7" class="text-center text-base-content/50 py-4">Nenhum aluno nesta turma.</td>
+                                    <td colspan="7" class="text-center text-base-content/50 py-4">
+                                        Nenhum aluno nesta turma.
+                                    </td>
                                 </tr>
 
                             {% endfor %}

@@ -67,6 +67,8 @@ class OficinaForm(NoRequiredAttrFormMixin, forms.ModelForm):
                 'pk', flat=True
             )
 
+        print(dir(self.fields['alunos'].widget))
+
     def save(self, commit=True):
         oficina = super().save(commit=commit)
         if commit:

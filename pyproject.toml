@@ -71,6 +71,7 @@ quote-style = "single"
 
 [tool.djlint]
 max_blank_lines = 1
+max_line_length=79
 indent = 4
 tabs = true
 format_css = true
@@ -78,7 +79,7 @@ format_js = true
 use_gitignore = true
 space_around_blocks = true
 blank_line_before_tag = "include,block,endblock,crispy,if,else,endif,for,endfor,comment,endcomment,with,endwith"
-blank_line_after_tag = "include,block,endblock,crispy,if,else,for,comment,endcomment,with,endwith,load,extends"
+blank_line_after_tag = "include,block,endblock,crispy,if,else,comment,endcomment,with,endwith,load,extends"
 ignore = "H005,H006,H007,H008,H009,H010,H011,H012,H013,H014,H015,H016,H017,H018,H019,H020,H021,H022,H023,H024,H025,H026,H027,H028,H029,H030,H031,H033,H035,H036,H037,J004,J018,T001,T002,T003,T027,T028,T032,T034"
 custom_html = "c-"
 

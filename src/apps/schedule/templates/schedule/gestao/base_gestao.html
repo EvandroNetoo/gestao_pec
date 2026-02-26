@@ -156,17 +156,23 @@
                         <li class="menu-title mt-4">Relatórios</li>
                         <li>
                             <a href="{% url 'relatorio_geral' %}" class=" 
-                                {% if request.resolver_match.url_name == 'relatorio_geral' %}menu-active{% endif %}">📈 Resumo
+                                {% if request.resolver_match.url_name == 'relatorio_geral' %}
+                                     menu-active 
+                                {% endif %}">📈 Resumo
                             Geral</a>
                         </li>
                         <li>
                             <a href="{% url 'relatorio_turma' %}" class=" 
-                                {% if request.resolver_match.url_name == 'relatorio_turma' %}menu-active{% endif %}">📋 Por
+                                {% if request.resolver_match.url_name == 'relatorio_turma' %}
+                                     menu-active 
+                                {% endif %}">📋 Por
                             Turma</a>
                         </li>
                         <li>
                             <a href="{% url 'relatorio_evento' %}" class=" 
-                                {% if request.resolver_match.url_name == 'relatorio_evento' %}menu-active{% endif %}">📊
+                                {% if request.resolver_match.url_name == 'relatorio_evento' %}
+                                     menu-active 
+                                {% endif %}">📊
                             Por Evento</a>
                         </li>
 
@@ -176,7 +182,9 @@
                         </li>
                     </ul>
 
-                    <div class="px-2 py-4 text-xs text-base-content/50">{{ request.user.get_full_name|default:request.user.email }}</div>
+                    <div class="px-2 py-4 text-xs text-base-content/50">
+                        {{ request.user.get_full_name|default:request.user.email }}
+                    </div>
                 </aside>
             </div>
         </div>
