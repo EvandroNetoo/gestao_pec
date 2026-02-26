@@ -16,17 +16,29 @@
 
         <link href="https://cdn.jsdelivr.net/npm/daisyui@5"
               rel="stylesheet"
-              type="text/css" />
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+              type="text/css"
+              hx-preserve="true"
+              id="daisyui-css" />
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
+                hx-preserve="true"
+                id="tailwindcss-js"></script>
         <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"
                 integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz"
-                crossorigin="anonymous"></script>
+                crossorigin="anonymous"
+                hx-preserve="true"
+                id="htmx-js"></script>
 
-        <link rel="shortcut icon"
+        <link rel="icon"
               href="{% static 'img/logo_gestao_pec.png' %}"
-              type="image/x-icon">
+              type="image/png"
+              hx-preserve="true"
+              id="favicon">
 
-        <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'css/styles.css' %}"
+              rel="stylesheet"
+              type="text/css"
+              hx-preserve="true"
+              id="styles-css" />
 
         {% block extrahead %}
 
@@ -34,7 +46,7 @@
 
     </head>
 
-    <body class="bg-base-200 min-h-screen">
+    <body class="bg-base-200 min-h-screen" hx-boost="true">
 
         {% block content %}
 

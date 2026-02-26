@@ -22,6 +22,7 @@ CSRF_COOKIE_SECURE = env_settings.CSRF_COOKIE_SECURE
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -120,6 +121,7 @@ STORAGES = {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
 }
+WHITENOISE_MAX_AGE = 31536000 if not DEBUG else 60
 
 
 # Media files (uploads)

@@ -42,8 +42,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        (function() {
             const calendarEl = document.getElementById('calendar');
+            if (!calendarEl || calendarEl.hasAttribute('data-fc-initialized')) return;
+            calendarEl.setAttribute('data-fc-initialized', 'true');
+
             const isMobile = window.innerWidth < 768;
 
             const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -94,7 +97,7 @@
                 },
             });
             calendar.render();
-        });
+        })();
     </script>
 
     <style>
