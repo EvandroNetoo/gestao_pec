@@ -138,50 +138,51 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 COTTON_DIR = 'components'
 
 # Logging Configuration for Production (Railway, Heroku, etc.)
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '[{asctime}] {levelname} [{name}:{lineno}] {message}',
-            'style': '{',
-            'datefmt': '%Y-%m-%d %H:%M:%S',
+if not DEBUG:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format': '[{asctime}] {levelname} [{name}:{lineno}] {message}',
+                'style': '{',
+                'datefmt': '%Y-%m-%d %H:%M:%S',
+            },
         },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+                'formatter': 'verbose',
+            },
         },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': env_settings.LOG_LEVEL,
-    },
-    'loggers': {
-        'django': {
+        'root': {
             'handlers': ['console'],
             'level': env_settings.LOG_LEVEL,
-            'propagate': False,
         },
-        'django.request': {
-            'handlers': ['console'],
-            'level': 'ERROR',
-            'propagate': False,
+        'loggers': {
+            'django': {
+                'handlers': ['console'],
+                'level': env_settings.LOG_LEVEL,
+                'propagate': False,
+            },
+            'django.request': {
+                'handlers': ['console'],
+                'level': 'ERROR',
+                'propagate': False,
+            },
+            # Captura erros e logs dos seus apps locais (accounts, schedule, etc)
+            'accounts': {
+                'handlers': ['console'],
+                'level': env_settings.LOG_LEVEL,
+                'propagate': False,
+            },
+            'schedule': {
+                'handlers': ['console'],
+                'level': env_settings.LOG_LEVEL,
+                'propagate': False,
+            },
         },
-        # Captura erros e logs dos seus apps locais (accounts, schedule, etc)
-        'accounts': {
-            'handlers': ['console'],
-            'level': env_settings.LOG_LEVEL,
-            'propagate': False,
-        },
-        'schedule': {
-            'handlers': ['console'],
-            'level': env_settings.LOG_LEVEL,
-            'propagate': False,
-        },
-    },
-}
+    }
 
 # Django Debug Toolbar
 if DEBUG:

@@ -50,11 +50,11 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Nome</th>
-                            <th>Turma</th>
+                            <th class="text-left w-0">Nome</th>
+                            <th class="text-center w-0">Turma</th>
                             <th>Oficinas</th>
-                            <th>Presenças</th>
-                            <th class="text-right">Ações</th>
+                            <th class="text-center w-0">Presenças</th>
+                            <th class="text-center w-0">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,7 +67,7 @@
                                     <a href="{% url 'aluno_detail' aluno.pk %}"
                                        class="link link-hover font-medium whitespace-nowrap">{{ aluno.nome }}</a>
                                 </td>
-                                <td>
+                                <td class="text-center w-0">
                                     <span class="badge badge-ghost badge-sm whitespace-nowrap">{{ aluno.turma }}</span>
                                 </td>
                                 <td>
@@ -75,16 +75,16 @@
                                     {% for oficina in aluno.oficinas_fixas.all %}
 
 
-                                        <span class="badge badge-sm badge-outline">{{ oficina.nome }}</span>
+                                        <span class="badge badge-sm badge-outline whitespace-nowrap">{{ oficina.nome }}</span>
                                     {% empty %}
                                         <span class="text-base-content/40">—</span>
 
                                     {% endfor %}
                                 </td>
-                                <td>
+                                <td class="text-center w-0">
                                     <span class="badge badge-primary badge-sm">{{ aluno.total_presencas|default:0 }} pts</span>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-center w-0">
                                     <div class="flex justify-end gap-1">
                                         <a href="{% url 'relatorio_aluno' aluno.pk %}"
                                            class="btn btn-ghost btn-xs"

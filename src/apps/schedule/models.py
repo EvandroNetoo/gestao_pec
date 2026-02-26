@@ -31,7 +31,7 @@ class Turma(models.Model):
         ordering = ['-semestre__nome', 'nome']
 
     def __str__(self):
-        return f'{self.nome} — {self.semestre}'
+        return f'{self.nome}'
 
 
 class Oficina(models.Model):
