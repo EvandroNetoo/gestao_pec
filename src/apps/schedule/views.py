@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from time import sleep
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_not_required
@@ -181,6 +182,7 @@ class DashboardView(TemplateView):
     template_name = 'schedule/gestao/dashboard.html'
 
     def get_context_data(self, **kwargs):
+        sleep(0.5)
         ctx = super().get_context_data(**kwargs)
         ctx['total_turmas'] = Turma.objects.filter(
             semestre__ativo=True

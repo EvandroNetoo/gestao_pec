@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
     <head>
         <meta charset="UTF-8">
@@ -12,7 +12,13 @@
 
             {% endblock title %}
 
-        PEC</title>
+            {% block site_name %}
+
+                PEC
+
+            {% endblock site_name %}
+
+        </title>
 
         <link href="https://cdn.jsdelivr.net/npm/daisyui@5"
               rel="stylesheet"
@@ -47,6 +53,53 @@
     </head>
 
     <body class="bg-base-200 min-h-screen" hx-boost="true">
+
+        <div id="htmx-progress-bar"
+             class="bg-primary/90"
+             style="position:fixed;
+                    top:0;
+                    left:0;
+                    height:3px;
+                    width:0;
+                    z-index:9999;
+                    transition:width 0.2s ease,opacity 0.4s ease;
+                    opacity:0;
+                    pointer-events:none"
+             hx-preserve></div>
+
+        <script>
+            (function() {
+                var bar = document.getElementById('htmx-progress-bar');
+                var timer = null;
+
+                function startBar() {
+                    clearTimeout(timer);
+                    bar.style.transition = 'width 0.2s ease, opacity 0.1s ease';
+                    bar.style.opacity = '1';
+                    bar.style.width = '0%';
+                    // Animate to ~80% gradually
+                    requestAnimationFrame(function() {
+                        bar.style.transition = 'width 8s cubic-bezier(0.1,0.05,0,1), opacity 0.1s ease';
+                        bar.style.width = '80%';
+                    });
+                }
+
+                function finishBar() {
+                    clearTimeout(timer);
+                    bar.style.transition = 'width 0.15s ease, opacity 0.4s ease 0.15s';
+                    bar.style.width = '100%';
+                    timer = setTimeout(function() {
+                        bar.style.opacity = '0';
+                        timer = setTimeout(function() {
+                            bar.style.width = '0%';
+                        }, 400);
+                    }, 150);
+                }
+
+                document.body.addEventListener('htmx:beforeRequest', startBar);
+                document.body.addEventListener('htmx:afterRequest', finishBar);
+            })();
+        </script>
 
         {% block content %}
 
