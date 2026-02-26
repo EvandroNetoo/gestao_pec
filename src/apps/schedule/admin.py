@@ -1,4 +1,5 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 
 from schedule.models import (
     AlocacaoPresenca,
@@ -27,7 +28,7 @@ class AlocacaoInline(admin.TabularInline):
 
 
 @admin.register(Semestre)
-class SemestreAdmin(admin.ModelAdmin):
+class SemestreAdmin(ImportExportModelAdmin):
     list_display = ['nome', 'ativo']
     list_filter = ['ativo']
     search_fields = ['nome']
@@ -35,7 +36,7 @@ class SemestreAdmin(admin.ModelAdmin):
 
 
 @admin.register(Turma)
-class TurmaAdmin(admin.ModelAdmin):
+class TurmaAdmin(ImportExportModelAdmin):
     list_display = ['nome', 'semestre']
     list_filter = ['semestre', 'semestre__ativo']
     search_fields = ['nome']
@@ -43,13 +44,13 @@ class TurmaAdmin(admin.ModelAdmin):
 
 
 @admin.register(Oficina)
-class OficinaAdmin(admin.ModelAdmin):
+class OficinaAdmin(ImportExportModelAdmin):
     list_display = ['nome', 'local_padrao']
     search_fields = ['nome']
 
 
 @admin.register(Aluno)
-class AlunoAdmin(admin.ModelAdmin):
+class AlunoAdmin(ImportExportModelAdmin):
     list_display = ['nome', 'turma', 'total_presencas']
     list_filter = ['turma__semestre', 'turma']
     search_fields = ['nome']
@@ -57,7 +58,7 @@ class AlunoAdmin(admin.ModelAdmin):
 
 
 @admin.register(Evento)
-class EventoAdmin(admin.ModelAdmin):
+class EventoAdmin(ImportExportModelAdmin):
     list_display = [
         'titulo',
         'tipo',
@@ -73,7 +74,7 @@ class EventoAdmin(admin.ModelAdmin):
 
 
 @admin.register(AlocacaoPresenca)
-class AlocacaoPresencaAdmin(admin.ModelAdmin):
+class AlocacaoPresencaAdmin(ImportExportModelAdmin):
     list_display = ['aluno', 'evento', 'status']
     list_filter = ['status', 'evento']
     search_fields = ['aluno__nome', 'evento__titulo']

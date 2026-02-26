@@ -13,7 +13,7 @@ class EnvSettings(BaseSettings):
 
     # Core Settings
     SECRET_KEY: str = 'change-me-in-production'  # noqa: S105
-    DEBUG: bool = False
+    DEBUG: bool = True
     LOG_LEVEL: str = 'INFO'
     ALLOWED_HOSTS: list[str] = ['*']
     CSRF_TRUSTED_ORIGINS: list[str] = []

@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Third-party apps
+    'import_export',
     'django_cotton',
     'widget_tweaks',
     # Local apps
