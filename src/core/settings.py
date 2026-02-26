@@ -149,6 +149,8 @@ if DEBUG:
 
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_TOOLBAR_CALLBACK': 'core.settings.show_toolbar',
+        'ROOT_TAG_EXTRA_ATTRS': 'hx-preserve',
+        'UPDATE_ON_FETCH': True,
     }
 
 
